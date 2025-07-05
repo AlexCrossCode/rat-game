@@ -1,5 +1,3 @@
-# menu.py
-
 import pygame
 from config import *
 
@@ -10,7 +8,7 @@ class Menu:
             "Jogo em pausa [ESC]",
             "1: Equipar arma rápida",
             "2: Equipar arma pesada",
-            "3: Equipar arco (placeholder)",
+            "3: Equipar arco",
             "E: Spawnar inimigo",
         ]
         for i, line in enumerate(lines):
