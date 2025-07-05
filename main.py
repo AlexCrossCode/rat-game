@@ -4,7 +4,6 @@ import pygame
 from config import *
 from player import Player
 from enemy import Enemy
-from weapon import Weapon
 from menu import Menu
 
 pygame.init()
@@ -32,11 +31,16 @@ while running:
         if not game_paused:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
-                    player.equip_weapon("fast")
+                    player.current_weapon_index = 0
+                    player.current_weapon = player.inventory[0]
                 if event.key == pygame.K_2:
-                    player.equip_weapon("heavy")
+                    if len(player.inventory) >= 2:
+                        player.current_weapon_index = 1
+                        player.current_weapon = player.inventory[1]
                 if event.key == pygame.K_3:
-                    player.equip_weapon("bow")
+                    if len(player.inventory) >= 3:
+                        player.current_weapon_index = 2
+                        player.current_weapon = player.inventory[2]
                 if event.key == pygame.K_e:
                     enemies.append(Enemy(600, 500))
 
