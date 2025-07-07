@@ -4,6 +4,10 @@ from weapon import Weapon
 
 class Player:
     def __init__(self, x, y):
+
+        self.max_health = 100 #sera que durante a minha gameplay vai aumentar?
+        self.health = self.max_health #efeitos prelongados de dano...
+
         self.rect = pygame.Rect(x, y, 32, 32)
         self.color = WHITE
         self.speed = 4
@@ -11,7 +15,6 @@ class Player:
         self.gravity = 0.5
         self.jump_power = -10
         self.on_ground = False
-        self.health = 100
         self.attack_cooldown = 0
 
         self.inventory = [
@@ -68,6 +71,16 @@ class Player:
             self.attack(enemies)
             self.attack_cooldown = self.current_weapon.cooldown
 
+        self.take_damage(5)#apagar
+        print(f"Player Health: {self.health}/{self.max_health}")#apagar
+
+
+    def take_damage(self, amount): #Criar algo que add vida ao jogador
+        self.health -= amount
+        if self.health <= 0:
+            self.health = 0    
+    
+    
     def attack(self, enemies):
         weapon = self.current_weapon
         if weapon.range_type == "melee":
