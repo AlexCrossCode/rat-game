@@ -82,8 +82,9 @@ while running:
         keys = pygame.key.get_pressed()
         player.update(keys, enemies, platforms, map_height)
 
-        for enemy in enemies:
-            enemy.update(player)
+    for enemy in enemies:
+        enemy.update(player, enemies)
+
 
     # Calcular offset da câmera
     camera_x = player.rect.centerx - SCREEN_WIDTH // 2
