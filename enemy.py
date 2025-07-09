@@ -2,7 +2,7 @@ import pygame
 from config import *
 
 class Enemy:
-    def __init__(self, x, y, health=30, color=RED, damage=5, speed=2, patrol_range=100, detection_range=150):
+    def __init__(self, x, y, health=30, color=RED, damage=5, speed=1, patrol_range=100, detection_range=150):
         self.rect = pygame.Rect(x, y, 30, 30)
         self.color = color
         self.health = health
@@ -20,17 +20,32 @@ class Enemy:
         if not self.alive:
             return
 
+        # Gravitacional
+        if not hasattr(self, 'vel_y'):
+            self.vel_y = 0
+
+        self.vel_y += 0.5  # gravidade
+        self.rect.y += self.vel_y
+
+        if platforms:
+            for platform in platforms:
+                if self.rect.colliderect(platform.rect):
+                    if self.vel_y > 0:  # descendo
+                        self.rect.bottom = platform.rect.top
+                        self.vel_y = 0
+                    elif self.vel_y < 0:  # subindo
+                        self.rect.top = platform.rect.bottom
+                        self.vel_y = 0
+
         # Calcular distância ao player
         distance_to_player = abs(player.rect.centerx - self.rect.centerx)
 
         if distance_to_player <= self.detection_range:
-            # Seguir player
             if player.rect.centerx > self.rect.centerx:
                 self.rect.x += self.speed
             elif player.rect.centerx < self.rect.centerx:
                 self.rect.x -= self.speed
         else:
-            # Patrulha
             self.rect.x += self.speed * self.direction
             distance = self.rect.x - self.start_x
             if abs(distance) >= self.patrol_range:
@@ -40,7 +55,6 @@ class Enemy:
         for other in enemies:
             if other is not self and other.alive:
                 if self.rect.colliderect(other.rect):
-                    # Empurrar um pouco para o lado
                     if self.rect.centerx < other.rect.centerx:
                         self.rect.x -= 1
                     else:
@@ -53,6 +67,7 @@ class Enemy:
         # Verificar morte
         if self.health <= 0:
             self.alive = False
+
 
     def take_damage(self, amount):
         self.health -= amount

@@ -114,13 +114,11 @@ class Player:
                         enemies.remove(enemy)
                     break
 
-    def draw(self, surface):
-        pygame.draw.rect(surface, self.color, self.rect)
+    
+    def draw(self, surface, camera_x=0, camera_y=0):
+        offset_rect = self.rect.move(-camera_x, -camera_y)
+        pygame.draw.rect(surface, self.color, offset_rect)
 
-        # Mostrar arma atual
-        font = pygame.font.SysFont(None, 24)
-        text = font.render(f"Weapon: {self.current_weapon.name}", True, YELLOW)
-        surface.blit(text, (10, 10))
 
     def get_coords(self):
         return (self.rect.x, self.rect.y)
